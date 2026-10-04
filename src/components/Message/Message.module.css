@@ -1,0 +1,10 @@
+/* this file name added name.module.css to use css module when we added module.css to the file name,
+ we can use css module in this file and these classes will be scoped to this component only and will not affect other components in the application. 
+ This is a good practice to avoid naming conflicts and keep the styles organized. */
+.item-selected{
+    background-color: blue;
+}
+
+.list-text{
+    color: red;
+}
