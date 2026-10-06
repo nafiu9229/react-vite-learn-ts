@@ -16,6 +16,9 @@ import Card from './components/Card';
 import ExpenseList from './ExpenseTracker/ExpenseList';
 import ExpenseFilter  from './ExpenseTracker/ExpenseFilter';
 import Expense from './ExpenseTracker/Expense/Expense';
+
+import ConnectingBackend from './useeffect/connectingbackend';
+
 function App() {
   const [count, setCount] = useState(0);
   const [cardItems, setCardItems] = useState(['Product1', 'product2']);
@@ -31,6 +34,7 @@ function App() {
   ]);
 
   const [category, setCategory] = useState("");
+  const [productCategory, setProductCategory] = useState("");
 
   
 
@@ -46,6 +50,8 @@ function App() {
           <Form></Form>
         </div>
         <div>
+                <ConnectingBackend category={productCategory}></ConnectingBackend>
+
           <Message items={["React", "Angular", "TypeScript"]} heading="Learning Frameworks" onSelectedItem= { handleSelectedItem } />
           <h1>Get started</h1>
           <p>
@@ -75,6 +81,14 @@ function App() {
       <div className='mb-3'><ExpenseFilter onSelectCategory={ (c) => setCategory(c)}></ExpenseFilter></div>
       
       <ExpenseList expenses={category ? expenses.filter(x=>x.category === category) : expenses} onDelete={ (id) => setExpenses(expenses.filter(x=>x.id !== id )) }></ExpenseList>
+      
+      <select className="form-select" onChange={(event) => setProductCategory(event.target.value)}>
+        <option value=""></option>
+        <option value="Clothing">Clothing</option>
+        <option value="household">house hold</option>
+      </select>
+      
+
       <div className="ticks"></div>
 
       <section id="next-steps">
