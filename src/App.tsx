@@ -18,6 +18,7 @@ import ExpenseFilter  from './ExpenseTracker/ExpenseFilter';
 import Expense from './ExpenseTracker/Expense/Expense';
 
 import ConnectingBackend from './useeffect/connectingbackend';
+import ProductUser from './components/Form/ProductUser'
 
 function App() {
   const [count, setCount] = useState(0);
@@ -88,6 +89,8 @@ function App() {
         <option value="household">house hold</option>
       </select>
       
+
+      <ProductUser></ProductUser>
 
       <div className="ticks"></div>
 

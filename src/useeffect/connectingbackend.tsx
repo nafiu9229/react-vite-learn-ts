@@ -5,6 +5,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import apiClient, { CanceledError, AxiosError } from '../services/api-client';
 //As we all done then no longer apiclient required to import
 import userService, { type User } from "../services/user-service";
+import useProductUser from '../hooks/useProductUser';
 
 const ConnectingBackend = ({category}: {category: string}) => {
     //No dependency Array
@@ -85,7 +86,8 @@ const ConnectingBackend = ({category}: {category: string}) => {
         */
 
         //Either we can make use like above or we can make use seperate service and call here
-        const { request, cancelC } = userService.getAllUsers();
+        //const { request, cancelC } = userService.getAllUsers();       
+        const { request, cancelC } = userService.getAll<User>();
         request.then((res)=>{ console.log(res);
             setProductUser(res.data);
         }).catch(err =>{ 
@@ -98,8 +100,11 @@ const ConnectingBackend = ({category}: {category: string}) => {
             }
         })
         return () => cancelC().abort();
-
+ 
     },[]);
+   
+    //useProductUser is custom hook if we want to call each page then we need to write all the code, to avoid we created the hook where ever we need we can make use of it
+    //const { productUser, error, isLoading, setProductUser, setIsLoading, setError } = useProductUser();
 
     const deleteUser =(p:User) =>{
         const orginalProductUser = [...productUser];
@@ -109,7 +114,11 @@ const ConnectingBackend = ({category}: {category: string}) => {
         //     setProductUser(orginalProductUser);
         // });
 
-        userService.deleteUser(p.id).catch((err) =>{
+        // userService.deleteUser(p.id).catch((err) =>{
+        //     setError(err.message);
+        //     setProductUser(orginalProductUser);
+        // });
+        userService.delete(p.id).catch((err) =>{
             setError(err.message);
             setProductUser(orginalProductUser);
         });
@@ -120,7 +129,14 @@ const ConnectingBackend = ({category}: {category: string}) => {
         const newUser = { id: 0, name: 'Mohammed Shazain', email: 'msz@gmail.com' }
         setProductUser([newUser, ...productUser]);
 
-        userService.cerateUser(newUser)
+        // userService.cerateUser(newUser)
+        // .then(res => setProductUser([res.data, ...productUser]))
+        // .catch(err => {
+        //     setError(err.message);
+        //     setProductUser(orginalProductUser);
+        // })
+
+        userService.create<User>(newUser)
         .then(res => setProductUser([res.data, ...productUser]))
         .catch(err => {
             setError(err.message);
@@ -133,7 +149,13 @@ const ConnectingBackend = ({category}: {category: string}) => {
         const updateUsers = {...user, name: user.name + "!"};
         setProductUser(productUser.map(p=> p.id === user.id ? updateUsers: p));
 
-        userService.updateUser(user.id, updateUsers)
+        // userService.updateUser(user.id, updateUsers)
+        // .catch(err=> {
+        //     setError(err.message);
+        //     setProductUser(orginalProductUser);
+        // })
+
+        userService.update<User>(updateUsers)
         .catch(err=> {
             setError(err.message);
             setProductUser(orginalProductUser);
